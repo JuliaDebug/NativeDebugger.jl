@@ -13,8 +13,8 @@ const SupportedWordSizes = Union{UInt32, UInt64}
 immutable RemotePtr{T,intptrT<:SupportedWordSizes}
     ptr::intptrT
 end
-(::Type{RemotePtr{T,S} where S <: SupportedWordSizes})(arg) where T = RemotePtr{T,UInt64}(arg)
-(::Type{RemotePtr{T,S} where S <: SupportedWordSizes})(arg::RemotePtr{<:Any,S′}) where (T, S′ <: SupportedWordSizes) = RemotePtr{T,S′}(arg)
+(::Type{RemotePtr{T,S} where S <: SupportedWordSizes})(arg) where {T} = RemotePtr{T,UInt64}(arg)
+(::Type{RemotePtr{T,S} where S <: SupportedWordSizes})(arg::RemotePtr{<:Any,S′}) where {T, S′ <: SupportedWordSizes} = RemotePtr{T,S′}(arg)
 (::Type{RemotePtr{<:Any,<:SupportedWordSizes}})(x::RemotePtr) = T(x.ptr)
 Base.convert(::Type{UInt64}, x::RemotePtr{UInt64}) = UInt64(x.ptr)
 Base.convert(::Type{UInt64}, x::RemotePtr) = UInt64(x.ptr)
